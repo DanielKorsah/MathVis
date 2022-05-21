@@ -6,4 +6,4 @@ Scenes with examples in 2D and in 3D.
 
 Potential expansion to more generalised maths priciples.
 
-Yeahs I say maths. MathVis just rols off the tongue nicer and might be more discoverable internationally than the *correct* way of saying it.
+Yeah, I say maths. MathVis just rols off the tongue nicer and might be more discoverable internationally than the *correct* way of saying it.

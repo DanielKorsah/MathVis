@@ -18,6 +18,7 @@ public class ArrowGraphics : ImmediateModeShapeDrawer
 
         using( Draw.Command( cam ) )
         {
+            Draw.BlendMode = ShapesBlendMode.Opaque;
             LineParams();
             MoveStart();
             MoveEnd();

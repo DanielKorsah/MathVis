@@ -7,19 +7,35 @@ using UnityEngine;
 public class ArrowGraphics : ImmediateModeShapeDrawer
 {
     public Line line;
+    public float thickness = 0.1f;
     public float tipAngle = 60;
     public float tipSideLength = 0.5f;
-    public Color headColour;
+    public Color arrowColour;
+    public Transform headTransform;
+    public Transform rootTransform;
 
     public override void DrawShapes( Camera cam ){
 
         using( Draw.Command( cam ) )
         {
-            print("Hello");
+            LineParams();
+            MoveStart();
             MoveEnd();
             DrawHead();
+            DrawRoot();
         }
 
+    }
+    
+    private void LineParams()
+    {
+        line.Color = arrowColour;
+        line.Thickness = thickness;
+    }
+
+    private void MoveStart()
+    {
+        line.Start = rootTransform.position;
     }
 
     private void MoveEnd()
@@ -31,8 +47,8 @@ public class ArrowGraphics : ImmediateModeShapeDrawer
         float triangleHeight = tipSideLength * Mathf.Sin(angleRad);
         
         //
-        Vector3 tip = transform.position;
-        Vector3 baseVector = (line.Start - tip).normalized * triangleHeight;
+        Vector3 tip = headTransform.position;
+        Vector3 baseVector = (rootTransform.position - tip).normalized * triangleHeight;
         Vector3 headBasePosition  = tip + baseVector;
 
         Vector3 smallPadding = -baseVector * 0.01f;
@@ -41,14 +57,18 @@ public class ArrowGraphics : ImmediateModeShapeDrawer
 
     private void DrawHead()
     {
-        Vector3 tip = transform.position;
+        Vector3 tip = headTransform.position;
         // A->B = B-A
-        Vector3 backwards = (line.Start - tip).normalized * tipSideLength;
+        Vector3 backwards = (rootTransform.position - tip).normalized * tipSideLength;
         Vector3 backwardsPoint = tip + backwards;
-        Vector3 left = tip + (Quaternion.AngleAxis(-tipAngle/2, transform.forward) * backwards);
-        Vector3 right = tip + (Quaternion.AngleAxis(tipAngle/2, transform.forward) * backwards);
+        Vector3 left = tip + (Quaternion.AngleAxis(-tipAngle/2, headTransform.forward) * backwards);
+        Vector3 right = tip + (Quaternion.AngleAxis(tipAngle/2, headTransform.forward) * backwards);
         //Debug.Log($"tip: {tip}\nleft: {left}\nright: {right}\nbackwards: {backwards}");
-        Draw.Triangle(tip, left, right, headColour);
-        
+        Draw.Triangle(tip, left, right, arrowColour);
+    }
+
+    private void DrawRoot()
+    {
+        Draw.Disc(rootTransform.position, thickness/2, arrowColour);
     }
 }

@@ -13,6 +13,7 @@ public class ArrowGraphics : ImmediateModeShapeDrawer
     public Color arrowColour;
     public Transform headTransform;
     public Transform rootTransform;
+    public bool roundBase = true;
 
     public override void DrawShapes( Camera cam ){
 
@@ -23,7 +24,8 @@ public class ArrowGraphics : ImmediateModeShapeDrawer
             MoveStart();
             MoveEnd();
             DrawHead();
-            DrawRoot();
+            if(roundBase)
+                DrawRoot();
         }
 
     }

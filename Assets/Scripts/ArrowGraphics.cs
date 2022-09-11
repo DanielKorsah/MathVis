@@ -14,6 +14,7 @@ public class ArrowGraphics : ImmediateModeShapeDrawer
     public Transform headTransform;
     public Transform rootTransform;
     public bool roundBase = true;
+    public PolygonCollider2D headGrabCollider;
 
     public override void DrawShapes( Camera cam ){
 
@@ -68,10 +69,17 @@ public class ArrowGraphics : ImmediateModeShapeDrawer
         Vector3 right = tip + (Quaternion.AngleAxis(tipAngle/2, headTransform.forward) * backwards);
         //Debug.Log($"tip: {tip}\nleft: {left}\nright: {right}\nbackwards: {backwards}");
         Draw.Triangle(tip, left, right, arrowColour);
+        
+        SetGrabcollider(tip, left, right);
     }
 
     private void DrawRoot()
     {
         Draw.Disc(rootTransform.position, thickness/2, arrowColour);
+    }
+
+    private void SetGrabcollider(Vector3 tip, Vector3 left, Vector3 right)
+    {
+        headGrabCollider.SetPath(0, new Vector2[]{tip-tip, left-tip, right-tip});
     }
 }

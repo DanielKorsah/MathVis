@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class ArrowHeadMover : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
+    public Toggle GridSnapToggle;
     private bool held;
     private Vector2 mousePos;
     
@@ -30,8 +31,13 @@ public class ArrowHeadMover : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         {
             mousePos = Input.mousePosition;
             Vector2 newPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            gameObject.transform.position = newPos;
             
+            if (GridSnapToggle.isOn)
+            {
+                newPos = new Vector2(Mathf.RoundToInt(newPos.x), Mathf.RoundToInt(newPos.y));
+            }
+            
+            gameObject.transform.position = newPos;
         }
     }
 }

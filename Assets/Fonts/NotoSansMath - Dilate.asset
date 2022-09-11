@@ -113,11 +113,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: NotoSansMath-Regular SDF
+  m_Name: NotoSansMath - Dilate
   m_EditorClassIdentifier: 
-  hashCode: -161885597
+  hashCode: -199754894
   material: {fileID: -7347165091480775131}
-  materialHashCode: -1832971293
+  materialHashCode: -1105681774
   m_Version: 1.1.0
   m_SourceFontFileGUID: ac1c989f2a80fd34bb84d7ba3b4ac7da
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: ac1c989f2a80fd34bb84d7ba3b4ac7da, type: 3}

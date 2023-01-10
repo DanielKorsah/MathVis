@@ -576,3 +576,7 @@ FodyWeavers.xsd
 
 # End of https://www.toptal.com/developers/gitignore/api/jetbrains+all,unity,visualstudio,visualstudiocode
 ProjectSettings/RiderScriptEditorPersistedState.asset
+
+
+# Build zips
+*.zip

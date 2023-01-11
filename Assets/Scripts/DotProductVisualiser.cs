@@ -37,7 +37,7 @@ public class DotProductVisualiser : ImmediateModeShapeDrawer
         dotOutputText.text = $"Dot Product: {dot}";
         float angle = (Mathf.Acos(dot / (a.magnitude * b.magnitude)));
         angleOutputText.text = $"Angle: {angle:0.##} rad  or {Mathf.Rad2Deg * angle:0.##}\u00B0";
-        magnitudeOutputText.text = $"Projected Vector Magnitude: {Vector3.Dot(a, b) / b.magnitude}";
+        magnitudeOutputText.text = $"Projected Vector Magnitude: {Vector3.Dot(a, b) / b.magnitude:0.##}";
     }
 
     private void GetVectors()

@@ -14,18 +14,15 @@ public class ArrowHeadMover : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     public void OnPointerDown(PointerEventData eventData)
     {
         held = true;
-        Debug.Log($"Click");
     }
     
     public void OnPointerUp(PointerEventData eventData)
     {
         held = false;
-        Debug.Log($"UnClick");
     }
 
     private void Update()
     {
-        print(held);
         if(held)
         {
             mousePos = Input.mousePosition;
@@ -34,6 +31,10 @@ public class ArrowHeadMover : MonoBehaviour, IPointerDownHandler, IPointerUpHand
             if (GridSnapToggle.isOn)
             {
                 newPos = new Vector2(Mathf.RoundToInt(newPos.x), Mathf.RoundToInt(newPos.y));
+                if (newPos.magnitude == 0)
+                {
+                    newPos.y = 1;
+                }
             }
             
             gameObject.transform.position = newPos;

@@ -36,17 +36,16 @@ public class DotProductVisualiser : ImmediateModeShapeDrawer
 
     private void ShowArc()
     {
-        float signedAngleA = SignedAngleBetween(Vector3.right, a);
-        float signedAngleB = SignedAngleBetween(Vector3.right, b);
+        Vector3 planeNormal = Vector3.Cross(a, b).normalized;
+        Vector3 arbitraryTangent = Vector3.Cross(planeNormal, a).normalized;
+        Quaternion rotation = Quaternion.LookRotation(planeNormal, arbitraryTangent);
 
-        float angleDifference = Mathf.Abs(signedAngleB - signedAngleA);
-        float smallestAngle = Mathf.Min(angleDifference, 2 * Mathf.PI - angleDifference);
+        angleArc.transform.position = Vector3.zero;
+        angleArc.transform.rotation = rotation;
 
-        angleArc.AngRadiansStart = Mathf.Min(signedAngleA, signedAngleB);
-        angleArc.AngRadiansEnd = angleArc.AngRadiansStart + smallestAngle;
-
-        float smallestMagnitude = Mathf.Min(a.magnitude, b.magnitude);
-        angleArc.Radius = Mathf.Clamp(smallestMagnitude/3,  0.5f, 2f);
+        float signedAngle = SignedAngleBetween(a, b, planeNormal);
+        angleArc.AngRadiansStart = 0;
+        angleArc.AngRadiansEnd = signedAngle;
     }
 
     
@@ -54,6 +53,13 @@ public class DotProductVisualiser : ImmediateModeShapeDrawer
     {
         float unsignedAngle = Mathf.Acos(Vector3.Dot(vectorA.normalized, vectorB.normalized));
         float sign = Mathf.Sign(Vector3.Dot(Vector3.Cross(vectorA, vectorB), Vector3.forward));
+        return unsignedAngle * sign;
+    }
+    
+    private float SignedAngleBetween(Vector3 vectorA, Vector3 vectorB, Vector3 normal)
+    {
+        float unsignedAngle = Mathf.Acos(Vector3.Dot(vectorA.normalized, vectorB.normalized));
+        float sign = Mathf.Sign(Vector3.Dot(Vector3.Cross(vectorA, vectorB), normal));
         return unsignedAngle * sign;
     }
 

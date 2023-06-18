@@ -37,16 +37,37 @@ public class DotProductVisualiser : ImmediateModeShapeDrawer
     private void ShowArc()
     {
         Vector3 planeNormal = Vector3.Cross(a, b).normalized;
-        Vector3 arbitraryTangent = Vector3.Cross(planeNormal, a).normalized;
-        Quaternion rotation = Quaternion.LookRotation(planeNormal, arbitraryTangent);
 
-        angleArc.transform.position = Vector3.zero;
-        angleArc.transform.rotation = rotation;
+        if (Vector3.Dot(a.normalized, b.normalized) > 0.999f) // If the vectors are nearly equal, pointing in the same direction
+        {
+            angleArc.AngRadiansStart = 0;
+            angleArc.AngRadiansEnd = 0; // Start and end at the same angle - no arc is drawn
+        }
+        else if (planeNormal.magnitude < 0.001f) // If the vectors are nearly equal, but in opposite directions
+        {
+            Vector3 arcRotationVector = Quaternion.Euler(0, 0, -90) * a; // Rotate vector A by 90 degrees around Z-axis
+            Quaternion arcRotation = Quaternion.FromToRotation(Vector3.up, arcRotationVector); // Construct rotation from up direction to the rotated vector
 
-        float signedAngle = SignedAngleBetween(a, b, planeNormal);
-        angleArc.AngRadiansStart = 0;
-        angleArc.AngRadiansEnd = signedAngle;
+            angleArc.transform.position = Vector3.zero;
+            angleArc.transform.rotation = arcRotation;
+
+            angleArc.AngRadiansStart = 0;
+            angleArc.AngRadiansEnd = Mathf.PI; // Draw a semicircle
+        }
+        else
+        {
+            Vector3 arbitraryTangent = Vector3.Cross(planeNormal, a).normalized;
+            Quaternion rotation = Quaternion.LookRotation(planeNormal, arbitraryTangent);
+
+            angleArc.transform.position = Vector3.zero;
+            angleArc.transform.rotation = rotation;
+
+            float signedAngle = SignedAngleBetween(a, b, planeNormal);
+            angleArc.AngRadiansStart = 0;
+            angleArc.AngRadiansEnd = signedAngle;
+        }
     }
+
 
     
     private float SignedAngleBetween(Vector3 vectorA, Vector3 vectorB)

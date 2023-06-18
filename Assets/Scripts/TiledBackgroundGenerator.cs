@@ -3,7 +3,6 @@ using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using Shapes;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -35,9 +34,35 @@ public class TiledBackgroundGenerator : ImmediateModeShapeDrawer
 #endif
     }
 
+    public void OnDisable()
+    {
+        base.OnDisable();
+        EnableWebCompatibleObjects();
+    }
+
+    private void EnableWebCompatibleObjects()
+    {
+        var background = GetComponentInChildren<Rectangle>(true).gameObject;
+        background.SetActive(true);
+        
+        Line[] lines = transform.GetComponentsInChildren<Line>(true);
+        foreach (Line line in lines)
+        {
+            line.gameObject.SetActive(true);
+        } 
+    }
+    
+
     private void DisableWebCompatibleObjects()
     {
-        throw new NotImplementedException();
+        var background = GetComponentInChildren<Rectangle>(true).gameObject;
+        background.SetActive(false);
+        
+        Line[] lines = transform.GetComponentsInChildren<Line>(true);
+        foreach (Line line in lines)
+        {
+            line.gameObject.SetActive(false);
+        } 
     }
 
 
@@ -46,7 +71,7 @@ public class TiledBackgroundGenerator : ImmediateModeShapeDrawer
         GameObject background;
         Rectangle rect;
         
-        if (transform.GetComponentInChildren<Rectangle>() == null)
+        if (transform.GetComponentInChildren<Rectangle>(true) == null)
         {
             background = new GameObject("Background Plane");
             background.transform.parent = gameObject.transform;
@@ -54,7 +79,8 @@ public class TiledBackgroundGenerator : ImmediateModeShapeDrawer
         }
         else
         {
-            background = GetComponentInChildren<Rectangle>().GameObject();
+            background = GetComponentInChildren<Rectangle>(true).gameObject;
+            background.SetActive(true);
             rect = background.GetComponent<Rectangle>();
         }
 
@@ -67,9 +93,13 @@ public class TiledBackgroundGenerator : ImmediateModeShapeDrawer
 
     private void WebglLines()
     {
-        Line[] preExistingLines = transform.GetComponentsInChildren<Line>();
+        Line[] preExistingLines = transform.GetComponentsInChildren<Line>(true);
         if (preExistingLines.Length != 0)
         {
+            foreach (Line line in preExistingLines)
+            {
+                line.gameObject.SetActive(true);
+            }
             return;
         }
         
@@ -111,6 +141,7 @@ public class TiledBackgroundGenerator : ImmediateModeShapeDrawer
         LineContainer.transform.parent = gameObject.transform;
         Line line = LineContainer.AddComponent<Line>();
         line.BlendMode = ShapesBlendMode.Opaque;
+        line.Thickness = lineWeight;
         line.Color = Color.grey;
         line.Start = start;
         line.End = end;
